@@ -426,9 +426,10 @@ export default class MainScene extends Phaser.Scene {
         if (last_element && trial_data.movement_data.length > 2) {
           reaction_time = first_element.evt_time - this.reference_time
           reach_time = last_element.evt_time - first_element.evt_time
-        }
+          }
+          console.log(reaction_time)
         if (!(reaction_time === null)) {
-          this.rts.push(reaction_time)
+          this.rts.push(this.rt)
           this.movets.push(reach_time)
           if (current_trial.trial_type === 'practice_mask') {
             this.practice_mask_mts.push(reach_time)
@@ -444,15 +445,14 @@ export default class MainScene extends Phaser.Scene {
             this.other_warns.text = '[b]Make reaches toward\nthe target.[/b]'
           }
         }
-        if ((current_trial.target_color == MAGENTA && reaction_time >= 350) || (current_trial.target_color == GREEN && reaction_time >= 650)) {
+        if ((current_trial.target_color == MAGENTA && this.rt >= 350) || (current_trial.target_color == GREEN && this.rt >= 650)) {
           punish_flags |= Err.late_start
           if (!punished) {
               punished = true
             this.other_warns.text = '[b]Please start the\nreach sooner.[/b]'
           }
         }
-          if (current_trial.target_color == GREEN && reaction_time <= 450) {
-              console.log(reaction_time)
+          if (current_trial.target_color == GREEN && this.rt <= 450) {
               // too early!
               punish_flags |= Err.early_start
               if (!punished) {
